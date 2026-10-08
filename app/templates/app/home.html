@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="pt-br">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Desafio 4.5</title>
+  <style>
+    :root { --bg:#0f172a; --card:#1e293b; --text:#e2e8f0; --muted:#94a3b8; --ok:#4ade80; --bad:#f87171; --accent:#38bdf8; }
+    * { box-sizing: border-box; }
+    body { margin:0; font-family: system-ui, sans-serif; background:var(--bg); color:var(--text); line-height:1.6; }
+    main { max-width: 860px; margin: 0 auto; padding: 32px 16px 64px; }
+    h1 { margin-bottom: 4px; }
+    .sub { color: var(--muted); margin-top: 0; }
+    .card { background: var(--card); border-radius: 12px; padding: 20px 24px; margin: 20px 0; }
+    h2 { margin-top: 0; font-size: 1.15rem; color: var(--accent); }
+    dl { display: grid; grid-template-columns: max-content 1fr; gap: 6px 16px; margin: 0; }
+    dt { color: var(--muted); }
+    dd { margin: 0; word-break: break-all; }
+    code { background: #0f172a; padding: 1px 6px; border-radius: 4px; }
+    pre { background:#0f172a; padding:12px 14px; border-radius:8px; overflow-x:auto; }
+    .ok { color: var(--ok); } .bad { color: var(--bad); }
+    a { color: var(--accent); }
+    ul { padding-left: 20px; }
+  </style>
+</head>
+<body>
+<main>
+  <h1>🐳 Desafio 4.5</h1>
+  <p class="sub">Se você está vendo "conectado" abaixo, o Django achou o Postgres.</p>
+
+  <section class="card">
+    <h2>Ao vivo: o que este container está vendo</h2>
+    <dl>
+      <dt>Container (hostname)</dt><dd>{{ container_id }}</dd>
+      <dt>Processo Gunicorn (PID)</dt><dd>{{ python_pid }}</dd>
+      <dt>DEBUG</dt><dd>{{ debug }}</dd>
+      <dt>Banco (host:porta)</dt><dd>{{ db_host }}:{{ db_port }}</dd>
+      <dt>Banco / usuário</dt><dd>{{ db_name }} / {{ db_user }}</dd>
+      <dt>Conexão com Postgres</dt>
+      <dd>{% if db_ok %}<span class="ok">● conectado</span>{% else %}<span class="bad">● falhou</span>{% endif %}</dd>
+      <dt>{% if db_ok %}Versão{% else %}Erro{% endif %}</dt><dd>{{ db_version }}</dd>
+    </dl>
+    <p><a href="/admin/">Ir para o Django Admin →</a></p>
+  </section>
+
+</main>
+</body>
+</html>
