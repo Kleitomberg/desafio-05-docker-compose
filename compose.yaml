@@ -1,0 +1,72 @@
+services:
+
+  postgres:
+    container_name: desafio5_db
+    image: postgres:18
+    environment:
+      POSTGRES_DB: ${DB_NAME}
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+    ports:
+      - 5432:5432
+    volumes:
+      - desafio5_data:/var/lib/postgresql
+    networks:
+      - desafio5_net
+    
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER} -d ${DB_NAME}"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
+  app:
+    container_name: desafio5_app
+    build: ./
+    # env_file:
+    #   - .env
+
+    environment:
+      SECRET_KEY: ${SECRET_KEY}
+      DEBUG: ${DEBUG}
+      DB_NAME: ${DB_NAME}
+      DB_USER: ${DB_USER}
+      DB_PASSWORD: ${DB_PASSWORD}
+      DB_HOST: ${DB_HOST}
+      DB_PORT: ${DB_PORT}
+    networks:
+      - desafio5_net
+    
+    ports:
+      - 8010:8000
+    
+    depends_on:
+      postgres:
+        condition: service_healthy
+    
+  pgadmin:
+    container_name: desafio5_pgadmin
+    image: dpage/pgadmin4:latest
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD} 
+    ports:
+      - 80:80
+    volumes:
+      - pgadmin_data:/var/lib/pgadmin
+
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+    networks:
+      - desafio5_net
+
+networks:
+  desafio5_net:
+    driver: bridge
+  
+volumes:
+  desafio5_data:
+  pgadmin_data:
+
